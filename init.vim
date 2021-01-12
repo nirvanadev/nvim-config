@@ -1,3 +1,5 @@
+let g:ale_disable_lsp = 1
+let g:airline#extensions#ale#enabled = 1
 call plug#begin("~/.vim/plugged")
 	" Theme
 	Plug 'dracula/vim', { 'as': 'dracula' }
@@ -11,9 +13,21 @@ call plug#begin("~/.vim/plugged")
 	Plug 'junegunn/fzf.vim'
 	" Intellisense
 	Plug 'neoclide/coc.nvim', {'branch': 'release'}
-	let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver', 'coc-phpls']
+	let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver']
+	Plug 'dense-analysis/ale'
 	" Splash Screen
 	Plug 'mhinz/vim-startify'
+	" Emacs only advantage
+	Plug 'jceb/vim-orgmode'
+	Plug 'vim-scripts/utl.vim'
+	Plug 'tpope/vim-repeat'
+	Plug 'yegappan/taglist'
+	Plug 'preservim/tagbar'
+	Plug 'tpope/vim-speeddating'
+	Plug 'chrisbra/NrrwRgn'
+	Plug 'mattn/calendar-vim'
+	Plug 'inkarkat/vim-SyntaxRange'
+	Plug 'axvr/org.vim'
 call plug#end()
 
 "Config Section
@@ -72,7 +86,10 @@ let g:fzf_action = {
 tnoremap <expr> <Esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
 
 " GENERAL
+set hidden
 set number relativenumber
+set laststatus=2
+set noshowmode
 let mapleader=" "
 " Remove highlight on searches
 map <Leader>0 :exe "noh" <CR>
@@ -129,3 +146,32 @@ if executable(s:clip)
 		autocmd TextYankPost * if v:event.operator ==# 'y' | call system(s:clip, @0) | endif
 	augroup END
 endif
+
+" STARTIFY CONFIG
+let g:ascii_header = [
+	\ ' _    __________  __ ',
+	\ '| | _|___ /___ / / _|',
+	\ '| |/ / |_ \ |_ \| |_ ',
+	\ '|   < ___) |__) |  _|',
+	\ '|_|\_\____/____/|_|  ',
+	\ ''
+	\ ]                     
+let g:startify_custom_header =
+	\ startify#pad(g:ascii_header + startify#fortune#boxed())
+
+" BOOKMARKS
+function! SetGMark(mark, filename, line_nr)
+	let l:mybuf = bufnr(a:filename, 1)
+	call setpos("'".a:mark, [l:mybuf, a:line_nr, 1, 0])
+endf
+call SetGMark('L', '/mnt/d/ownCloud/hd1/orgnotes/work/compulse/log.org', 5)
+call SetGMark('T', '/mnt/d/ownCloud/hd1/orgnotes/work/compulse/tasks.org', 3)
+call SetGMark('V', '/home/k33f/.vimrc', 58)
+call SetGMark('A', '/mnt/d/ahk_scripts/ahk_2020/ahk33.ahk', 6)
+
+" Orgmode mappings
+nmap <C-j> <localleader>hh
+imap <C-j> <Esc><localleader>hh
+nmap <C-k> <localleader>hN
+imap <C-k> <Esc><localleader>hN
+nmap <Leader>c <localleader>cc

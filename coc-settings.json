@@ -1,0 +1,4 @@
+{
+	"phpls.enable": false,
+	"diagnostic.displayByAle": true
+}
